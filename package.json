@@ -1,0 +1,25 @@
+{
+  "name": "whos-chasing",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "NODE_ENV=development electron .",
+    "dev:frontend": "cd frontend && npm start",
+    "build": "npm run build:frontend && npm run build:electron",
+    "build:frontend": "cd frontend && npm run build",
+    "build:electron": "electron-builder",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "electron",
+    "react",
+    "desktop-app"
+  ],
+  "author": "",
+  "license": "ISC",
+  "description": "A desktop application built with Electron and React",
+  "devDependencies": {
+    "electron": "^36.5.0"
+  }
+}
