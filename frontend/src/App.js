@@ -9,6 +9,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedContact, setSelectedContact] = useState(null);
+  const [conversationData, setConversationData] = useState(null);
   const [currentPage, setCurrentPage] = useState('startup'); // 'startup', 'contacts', 'analysis'
 
   useEffect(() => {
@@ -59,8 +60,8 @@ function App() {
           setError(data.error);
         } else {
           setSelectedContact(contact);
+          setConversationData(data);
           setCurrentPage('analysis');
-          // You can store the conversation data here if needed
           console.log('Conversation data:', data);
         }
       } else {
@@ -75,11 +76,13 @@ function App() {
 
   const handleBackToContacts = () => {
     setSelectedContact(null);
+    setConversationData(null);
     setCurrentPage('contacts');
   };
 
   const handleBackToStart = () => {
     setSelectedContact(null);
+    setConversationData(null);
     setCurrentPage('startup');
   };
 
@@ -103,6 +106,7 @@ function App() {
       return (
         <AnalysisPage
           selectedContact={selectedContact}
+          conversationData={conversationData}
           onBackToContacts={handleBackToContacts}
         />
       );
