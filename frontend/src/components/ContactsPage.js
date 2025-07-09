@@ -64,6 +64,7 @@ function ContactsPage({
                     }
                   </h3>
                   <p className="phone-number">{contact[0] || 'No phone number'}</p>
+                  <p>{contact[3]} messages exchanged in the past year</p>
                 </div>
               </div>
             ))

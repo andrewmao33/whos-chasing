@@ -44,11 +44,19 @@ def get_contacts():
             SELECT h.id AS handle, COUNT(m.ROWID) AS message_count
             FROM message m
             JOIN handle h ON m.handle_id = h.rowid
+            JOIN chat_message_join cmj ON m.ROWID = cmj.message_id
+            JOIN chat c ON cmj.chat_id = c.ROWID
             WHERE m.text IS NOT NULL 
             AND datetime(m.date / 1000000000 + 978307200, 'unixepoch') >= datetime('now', '-1 year')
+            AND c.ROWID IN (
+                SELECT chat_id
+                FROM chat_handle_join
+                GROUP BY chat_id
+                HAVING COUNT(DISTINCT handle_id) = 1
+            )
             GROUP BY h.id
         )
-        SELECT DISTINCT v.ZFULLNUMBER, ZFIRSTNAME, ZLASTNAME
+        SELECT DISTINCT v.ZFULLNUMBER, ZFIRSTNAME, ZLASTNAME, mc.message_count
         FROM ZABCDPHONENUMBER v
         JOIN ZABCDRECORD p ON v.ZOWNER = p.Z_PK
         JOIN message_counts mc ON v.ZFULLNUMBER = mc.handle
@@ -65,6 +73,7 @@ def get_conversation(phone_number: str):
     decoded_phone = unquote(phone_number)
     print(f"Original: {phone_number}, Decoded: {decoded_phone}")
 
+    # select all messages from the chat database for the given phone number, no group chats
     conn = sqlite3.connect(CHAT_DB_PATH)
     cursor = conn.cursor()
     cursor.execute("""
